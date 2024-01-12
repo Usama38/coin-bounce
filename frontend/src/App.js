@@ -3,14 +3,67 @@ import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/pages/Home/Home";
 import styles from "./App.module.css";
+import ProtectedRoutes from "../src/components/ProtectedRoutes/ProtectedRoutes";
+import Error from "./components/pages/Error/Error";
+
 function App() {
+  const isAuth = true;
   return (
     <div className={styles.container}>
       <BrowserRouter>
-        <div>
+        <div className={styles.layout}>
           <Navbar />
           <Routes>
-            <Route path="/home" exact element={<Home />} />
+            <Route
+              path="/"
+              exact
+              element={
+                <div className={styles.main}>
+                  <Home />
+                </div>
+              }
+            />
+            <Route
+              path="crypto"
+              exact
+              element={<div className={styles.main}>Crypto Page</div>}
+            />
+            <Route
+              path="blogs"
+              exact
+              element={
+                <ProtectedRoutes isAuth={isAuth}>
+                  <div className={styles.main}>Blogs Page</div>
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="submit"
+              exact
+              element={
+                <ProtectedRoutes isAuth={isAuth}>
+                  <div className={styles.main}>Submit a blog Page</div>
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="login"
+              exact
+              element={<div className={styles.main}>LogIn Page</div>}
+            />
+            <Route
+              path="signup"
+              exact
+              element={<div className={styles.main}>SignUp Page</div>}
+            />
+            <Route
+              path="*"
+              element={
+                <div className={styles.main}>
+                  <Error />
+                </div>
+              }
+            />
           </Routes>
           <Footer />
         </div>
