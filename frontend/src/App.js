@@ -5,9 +5,12 @@ import Home from "./components/pages/Home/Home";
 import styles from "./App.module.css";
 import ProtectedRoutes from "../src/components/ProtectedRoutes/ProtectedRoutes";
 import Error from "./components/pages/Error/Error";
+import Login from "./components/pages/Login/Login";
+import { useSelector } from "react-redux";
+import Signup from "./components/pages/Signup/Signup";
 
 function App() {
-  const isAuth = true;
+  const isAuth = useSelector((state) => state.user.auth);
   return (
     <div className={styles.container}>
       <BrowserRouter>
@@ -49,12 +52,20 @@ function App() {
             <Route
               path="login"
               exact
-              element={<div className={styles.main}>LogIn Page</div>}
+              element={
+                <div className={styles.main}>
+                  <Login />
+                </div>
+              }
             />
             <Route
               path="signup"
               exact
-              element={<div className={styles.main}>SignUp Page</div>}
+              element={
+                <div className={styles.main}>
+                  <Signup />
+                </div>
+              }
             />
             <Route
               path="*"
