@@ -26,7 +26,6 @@ function Login() {
     };
 
     const response = await login(data);
-
     if (response.status === 200) {
       //1. store in global userSlice state
       const user = {
@@ -38,7 +37,7 @@ function Login() {
       dispatch(setUser(user));
       //2. navigate to home page
       navigate("/");
-    } else if ((response.code = "ERR_BAD_REQUEST")) {
+    } else if ((response.code === "ERR_BAD_REQUEST")) {
       //display error message
       setError(response.response.data.message);
     }

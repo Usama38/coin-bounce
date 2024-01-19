@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 app.use(cors(corsOptions));
 
-app.use(express.json()); //allow to our application that can use data as json for communicate
+app.use(express.json({limit:'50mb'})); //allow to our application that can use data as json for communicate
 
 app.use(router);
 
