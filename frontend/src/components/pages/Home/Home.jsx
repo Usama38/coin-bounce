@@ -18,7 +18,7 @@ function Home() {
     window.open(url, "_blank");
   };
 
-  if (articles.length === 0) {
+  if (articles && articles.length === 0) {
     return <Loader text="homepage" />;
   }
   return (

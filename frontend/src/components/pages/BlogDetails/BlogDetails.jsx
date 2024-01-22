@@ -9,6 +9,7 @@ import {
   postComment,
 } from "../../../api/internal";
 import CommentList from "../../CommentList/CommentList";
+import Loader from "../../Loader/Loader";
 function BlogDetails() {
   const [blog, setBlog] = useState([]);
   const [comments, setComments] = useState([]);
@@ -42,6 +43,7 @@ function BlogDetails() {
       navigate("/");
     }
   };
+
   useEffect(() => {
     async function getBlogDetails() {
       const commentResponse = await getCommentsById(blogId);
@@ -57,12 +59,15 @@ function BlogDetails() {
     getBlogDetails(); //same IIFE effect
   }, [reload]);
 
+  if (blog?.length === 0) {
+    return <Loader text={"Blog Details"} />;
+  }
   return (
     <div className={styles.detailsWrapper}>
       <div className={styles.left}>
         <h1 className={styles.title}>{blog.title}</h1>
         <div className={styles.meta}>
-          <p>{`@${blog.author} on ${new Date(
+          <p>{`@${blog.authorUsername} on ${new Date(
             blog.createdAt
           ).toDateString()}`}</p>
         </div>
@@ -72,7 +77,12 @@ function BlogDetails() {
         <p className={styles.content}>{blog.content}</p>
         {ownsBlog && (
           <div className={styles.controls}>
-            <button className={styles.edit} onClick={() => {}}>
+            <button
+              className={styles.edit}
+              onClick={() => {
+                navigate(`/blog/update/${blog._id}`);
+              }}
+            >
               Edit
             </button>
             <button className={styles.delete} onClick={deleteBlogHandler}>
@@ -83,7 +93,7 @@ function BlogDetails() {
       </div>
       <div className={styles.right}>
         <div className={styles.commentsWrapper}>
-          <CommentList />
+          <CommentList comments={comments} />
           <div className={styles.postComment}>
             <input
               type="text"
