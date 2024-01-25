@@ -6,7 +6,7 @@ class BlogDetailsDTO {
     this.photo = blog.photoPath;
     this.createdAt = blog.createdAt;
     this.authorName = blog.author.name;
-    this.authUsername = blog.author.username;
+    this.authorUsername = blog.author.username;
   }
 }
 module.exports = BlogDetailsDTO;

@@ -99,3 +99,41 @@ export const deleteBlog = async (id) => {
   }
   return response;
 };
+
+export const updateBlog = async (data) => {
+  let response;
+  try {
+    response = await api.put("/blog", data);
+  } catch (error) {
+    return error;
+  }
+  return response;
+};
+
+api.interceptors.response.use(
+  (config) => config,
+  async (error) => {
+    const originalReq = error.config;
+    // extract the value of message from json response if it exists
+    const errorMessage =
+      error.response && error.response.data && error.response.data.message;
+
+    if (
+      errorMessage === "Unauthorized" &&
+      (error.response.status === 401 || error.response.status === 500) &&
+      originalReq &&
+      !originalReq._isRetry
+    ) {
+      originalReq._isRetry = true; //stop loop req
+      try {
+        await api.get(`${process.env.REACT_APP_INTERNAL_API_PATH}/refresh`, {
+          withCredentials: true,
+        });
+        return api.request(originalReq);
+      } catch (error) {
+        return error;
+      }
+    }
+    throw error;
+  }
+);

@@ -12,10 +12,16 @@ import Crypto from "./components/pages/Crypto/Crypto";
 import Blog from "./components/pages/Blog/Blog";
 import SubmitBlog from "./components/pages/SubmitBlog/SubmitBlog";
 import BlogDetails from "./components/pages/BlogDetails/BlogDetails";
+import UpdateBlog from "./components/pages/UpdateBlog/UpdateBlog";
+import useAutoLogin from "./hooks/useAutoLogin";
+import Loader from "./components/Loader/Loader";
 
 function App() {
   const isAuth = useSelector((state) => state.user.auth);
-  return (
+  const loading = useAutoLogin();
+  return loading ? (
+    <Loader text="..." />
+  ) : (
     <div className={styles.container}>
       <BrowserRouter>
         <div className={styles.layout}>
@@ -50,13 +56,24 @@ function App() {
                 </ProtectedRoutes>
               }
             />
-             <Route
+            <Route
               path="blog/:id"
               exact
               element={
                 <ProtectedRoutes isAuth={isAuth}>
                   <div className={styles.main}>
                     <BlogDetails />
+                  </div>
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="blog-update/:id"
+              exact
+              element={
+                <ProtectedRoutes isAuth={isAuth}>
+                  <div className={styles.main}>
+                    <UpdateBlog />
                   </div>
                 </ProtectedRoutes>
               }

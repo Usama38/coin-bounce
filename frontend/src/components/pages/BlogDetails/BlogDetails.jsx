@@ -21,9 +21,26 @@ function BlogDetails() {
   const params = useParams();
   const blogId = params.id;
   const username = useSelector((state) => state.user.username);
-  const userId = useSelector((state) => state.user.id);
+  const userId = useSelector((state) => state.user._id);
+
+  useEffect(() => {
+    async function getBlogDetails() {
+      const commentResponse = await getCommentsById(blogId);
+      if (commentResponse.status === 200) {
+        setComments(commentResponse.data.data);
+      }
+
+      const blogResponse = await getBlogById(blogId);
+      if (blogResponse?.status === 200) {
+        setOwnsBlog(username === blogResponse?.data?.blog?.authorUsername);
+        setBlog(blogResponse.data.blog);
+      }
+    }
+    getBlogDetails(); //same IIFE effect
+  }, [reload]);
 
   const postCommentHandler = async () => {
+
     const data = {
       author: userId,
       blog: blogId,
@@ -44,21 +61,6 @@ function BlogDetails() {
     }
   };
 
-  useEffect(() => {
-    async function getBlogDetails() {
-      const commentResponse = await getCommentsById(blogId);
-      if (commentResponse.status === 200) {
-        setComments(commentResponse.data.data);
-      }
-
-      const blogResponse = await getBlogById(blogId);
-      if (blogResponse.status === 200) {
-        setBlog(blogResponse.data.blog);
-      }
-    }
-    getBlogDetails(); //same IIFE effect
-  }, [reload]);
-
   if (blog?.length === 0) {
     return <Loader text={"Blog Details"} />;
   }
@@ -78,14 +80,14 @@ function BlogDetails() {
         {ownsBlog && (
           <div className={styles.controls}>
             <button
-              className={styles.edit}
+              className={styles.editButton}
               onClick={() => {
-                navigate(`/blog/update/${blog._id}`);
+                navigate(`/blog-update/${blog._id}`);
               }}
             >
               Edit
             </button>
-            <button className={styles.delete} onClick={deleteBlogHandler}>
+            <button className={styles.deleteButton} onClick={deleteBlogHandler}>
               Delete
             </button>
           </div>
