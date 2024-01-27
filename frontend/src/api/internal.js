@@ -110,16 +110,17 @@ export const updateBlog = async (data) => {
   return response;
 };
 
+//auto token refresh
 api.interceptors.response.use(
   (config) => config,
   async (error) => {
     const originalReq = error.config;
     // extract the value of message from json response if it exists
-    const errorMessage =
-      error.response && error.response.data && error.response.data.message;
+    // const errorMessage =
+    //   error.response && error.response.data && error.response.data.message;
 
     if (
-      errorMessage === "Unauthorized" &&
+      // errorMessage === "Unauthorized" &&
       (error.response.status === 401 || error.response.status === 500) &&
       originalReq &&
       !originalReq._isRetry
